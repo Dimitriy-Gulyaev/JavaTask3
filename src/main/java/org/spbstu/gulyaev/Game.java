@@ -28,6 +28,7 @@ public class Game {
                 d.moveChip(x1, y1, x2, y2);
                 if(player == 1) black--;
                 else white--;
+                if (black == 0 || white == 0) isGame = false;
                 return true;
             }
         }
@@ -45,6 +46,7 @@ public class Game {
     }
 
     public boolean move(int x1, int y1, int x2, int y2) {
+        if(!isGame) return false;
         if (Math.abs(x2 - x1) == Math.abs(y2 - y1) &&
                 (player == d.getCurChip(x1, y1) || player * 2 == d.getCurChip(x1, y1))) {
             int del = Math.abs(y2 - y1) == 1 ? y2 - y1 : Math.abs(y2 - y1) == 2 ? (y2 - y1)/2 : -13;
