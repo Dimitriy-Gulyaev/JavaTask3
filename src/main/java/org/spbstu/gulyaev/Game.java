@@ -1,11 +1,19 @@
 package org.spbstu.gulyaev;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Game {
     private Deck d = new Deck();
 
     private int player = 1;
+
+    private boolean isGame = true;
+
+    private int black = 12;
+    private int white = 12;
 
     private boolean moveOrdinar(int x1, int y1, int x2, int y2) {
         if (Math.abs(x2 - x1) == 1 && d.getCurChip(x2, y2) == 0) {
@@ -18,16 +26,29 @@ public class Game {
             if (d.getCurChip(x1 + dx, y1 + dy) == player * -1) {
                 d.delete(x1 + dx, y1 + dy);
                 d.moveChip(x1, y1, x2, y2);
+                if(player == 1) black--;
+                else white--;
+                return true;
             }
-            return true;
         }
         return false;
+    }
+
+    public boolean move(int x1, int y1, LinkedHashMap<Integer, Integer> moves) {
+        for(Map.Entry<Integer, Integer> entry : moves.entrySet()) {
+            if(!move(x1,y1,entry.getKey(),entry.getValue())) return false;
+            x1 = entry.getKey();
+            y1 = entry.getValue();
+        }
+        finishMove();
+        return true;
     }
 
     public boolean move(int x1, int y1, int x2, int y2) {
         if (Math.abs(x2 - x1) == Math.abs(y2 - y1) &&
                 (player == d.getCurChip(x1, y1) || player * 2 == d.getCurChip(x1, y1))) {
-            if (d.getCurChip(x1, y1) == player && (player * -1 == y2 - y1 || player * -1 == (y2 - y1) / 2))
+            int del = Math.abs(y2 - y1) == 1 ? y2 - y1 : Math.abs(y2 - y1) == 2 ? (y2 - y1)/2 : -13;
+            if (d.getCurChip(x1, y1) == player && del != -13)
                 return moveOrdinar(x1, y1, x2, y2);
             else if (d.getCurChip(x1, y1) == player * 2) {
                 return moveUp(x1, y1, x2, y2);

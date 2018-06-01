@@ -1,8 +1,14 @@
 package org.spbstu.gulyaev;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
@@ -31,6 +37,18 @@ class GameTest {
 
         Assertions.assertTrue(game.move(3,1,1,3));
         Assertions.assertEquals(0, game.getDeck().getCurChip(3,1));
+        game.finishMove();
+
+        Assertions.assertTrue(game.move(1,5,0,4));
+        game.finishMove();
+        game.debugMove(0,0, 3,3);
+        LinkedHashMap<Integer,Integer> moves = new LinkedHashMap<Integer, Integer>();
+        moves.put(2,2); moves.put(4,4);
+        Assertions.assertTrue(game.move(0,4,moves));
+        Assertions.assertEquals(1, game.getDeck().getCurChip(4,4));
+        Assertions.assertEquals(0, game.getDeck().getCurChip(3,3));
+        Assertions.assertEquals(0, game.getDeck().getCurChip(2,2));
+
 
         game.debugDelete(6,0);
         game.debugMove(3,7, 7,1);
